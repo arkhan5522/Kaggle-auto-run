@@ -3,7 +3,7 @@ name: Auto Run Kaggle Notebook
 on:
   schedule:
     - cron: "0 * * * *"   # runs every hour
-  workflow_dispatch:        # allow manual run from Actions tab
+  workflow_dispatch:
 
 jobs:
   run:
@@ -16,7 +16,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: '3.11'  # ✅ fixed version
 
       - name: Install dependencies
         run: pip install -r requirements.txt
