@@ -4,12 +4,16 @@ import time
 
 NOTEBOOK = "abdulrehman0101/poster-automation/"  # <--- change if needed
 
-def run_notebook():
-    print(f"🚀 Running Kaggle notebook: {NOTEBOOK}")
-    api = KaggleApi()
-    api.authenticate()
-    api.kernels_push(NOTEBOOK)
-    print("✅ Notebook execution triggered successfully at", time.ctime())
+print(f"🚀 Running Kaggle notebook remotely: {NOTEBOOK_REF}")
 
-if __name__ == "__main__":
-    run_notebook()
+# Re-run the notebook directly on Kaggle servers
+try:
+    api.kernels_output(NOTEBOOK_REF)  # check if exists
+    api.kernels_push_cli(NOTEBOOK_REF)  # older approach, but won't work for remote
+except Exception as e:
+    print(f"⚠️ Direct push failed: {e}")
+    print("➡️ Using Kaggle API to re-run existing notebook...")
+    api.kernels_pull(NOTEBOOK_REF, path='notebook')
+    os.chdir('notebook')
+    api.kernels_push('.')  # this uploads and re-runs the notebook
+    print("🎉 Notebook execution triggered successfully!")
